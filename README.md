@@ -116,7 +116,7 @@ aws ecs run-task --cluster <default> --task-definition <task-name>
 
 Once finish the experiment, clean up the resources associated with it. Follow the guide, https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CleaningUp.html
 
-##Reference
+## Reference
 
 https://github.com/callicoder/spring-boot-websocket-chat-demo  
 https://www.callicoder.com/spring-boot-docker-example/  
