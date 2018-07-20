@@ -6,6 +6,8 @@
 
 2. Maven - 3.x.x
 
+3. AWS-CLI - 1.15.x
+
 ## Steps to Setup
 
 **1. Clone the application**
@@ -82,7 +84,42 @@ You can see the list of all containers running in your system using the followin
 $ docker container ls
 ```
 
-**Reference**
+**5. Push your image to Amazon Elastic Container Registry**
 
-https://github.com/callicoder/spring-boot-websocket-chat-demo
-https://www.callicoder.com/spring-boot-docker-example/
+```bash
+aws ecr create-repository --repository-name spring-boot-container-ECS-demo
+
+docker tag spring-boot-container-ECS-demo <aws_account_id>.dkr.ecr.<us-west-1>.amazonaws.com/spring-boot-container-ECS-demo
+
+aws ecr get-login --no-include-email
+
+docker login -u AWS -p <ssh-key>
+
+docker push <aws_account_id>.dkr.ecr.<us-west-1>.amazonaws.com/spring-boot-container-ECS-demo
+```
+
+**6. register a task definition with the ECR docker image**
+
+Create the "task-def.json" file, which in this reposiroty, it is already in the folder. And then register a task definition with this json file.
+
+```bash
+aws ecs register-task-definition --cli-input-json file://task-def.json
+```
+
+Before you run the task, follow the steps to create a cluster in ECS console. https://docs.aws.amazon.com/AmazonECS/latest/developerguide/create_cluster.html
+
+```bash
+aws ecs run-task --cluster <default> --task-definition <task-name>
+```
+
+**7. Cleaning up**
+
+Once finish the experiment, clean up the resources associated with it. Follow the guide, https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CleaningUp.html
+
+##Reference
+
+https://github.com/callicoder/spring-boot-websocket-chat-demo  
+https://www.callicoder.com/spring-boot-docker-example/  
+https://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-basics.html  
+https://docs.aws.amazon.com/AmazonECS/latest/developerguide/create_cluster.html  
+https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CleaningUp.html  
